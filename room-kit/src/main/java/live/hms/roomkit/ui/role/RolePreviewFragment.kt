@@ -101,7 +101,7 @@ class RolePreviewFragment : BottomSheetDialogFragment() {
             meetingViewModel.changeRoleAccept(onSuccess = {
                 contextSafe { context, activity ->
                     activity.runOnUiThread {
-                        meetingViewModel.lowerLocalPeerHand()
+//                        meetingViewModel.lowerLocalPeerHand()
                         findNavController().navigate(
                             RolePreviewFragmentDirections.actionRolePreviewFragmentToMeetingFragment(
                                 false

@@ -1103,7 +1103,10 @@ class MeetingViewModel(
                                 roleOnJoining?.name,
                                 object : HMSActionResultListener {
                                     override fun onError(error: HMSException) {}
-                                    override fun onSuccess() {}
+                                    override fun onSuccess() {
+                                        if (hasLocalPeerRaisedHand)
+                                            lowerLocalPeerHand()
+                                    }
                                 })
 
                             initPrebuiltChatMessageRecipient.postValue(Pair(prebuiltInfoContainer.defaultRecipientToMessage(), ++recNum))
@@ -2093,6 +2096,7 @@ class MeetingViewModel(
         }
     }
 
+    var hasLocalPeerRaisedHand = false
     private fun raiseLocalPeerHand() {
         hmsSDK.raiseLocalPeerHand(object : HMSActionResultListener{
             override fun onError(error: HMSException) {
@@ -2100,6 +2104,7 @@ class MeetingViewModel(
             }
 
             override fun onSuccess() {
+                hasLocalPeerRaisedHand = true
                 setHandRaisedAtTime(true)
                 Log.d(TAG, "Successfully raised hand")
             }
@@ -2113,6 +2118,7 @@ class MeetingViewModel(
             }
 
             override fun onSuccess() {
+                hasLocalPeerRaisedHand = false
                 Log.d(TAG, "Successfully lowered hand")
                 setHandRaisedAtTime(false)
             }
