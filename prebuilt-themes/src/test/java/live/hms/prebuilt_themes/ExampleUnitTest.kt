@@ -1,8 +1,8 @@
 package live.hms.prebuilt_themes
 
-import org.junit.Test
+import hms.junit.Test
 
-import org.junit.Assert.*
+import hms.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).

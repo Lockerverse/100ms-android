@@ -1,8 +1,8 @@
 package live.hms.app2.util
 
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Test
+import hms.hamcrest.CoreMatchers.equalTo
+import hms.hamcrest.MatcherAssert.assertThat
+import hms.junit.Test
 
 class InternalUtilsKtTest() {
 
