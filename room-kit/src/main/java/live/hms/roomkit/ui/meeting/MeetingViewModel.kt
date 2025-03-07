@@ -1049,6 +1049,7 @@ class MeetingViewModel(
                 updatePolls()
                 participantPeerUpdate.postValue(Unit)
                 setupWhiteBoardListener()
+                updateUserImage()
                 joined.postValue(true)
             }
 
@@ -1342,6 +1343,21 @@ class MeetingViewModel(
                 }
             }
         })
+    }
+
+    fun updateUserImage() {
+        val newMetadata =
+            "{\"image\": \"${prebuiltOptions?.userImage}\"}"
+        hmsSDK.changeMetadata(
+            newMetadata,
+            object : HMSActionResultListener {
+                override fun onSuccess() {
+                }
+
+                override fun onError(error: HMSException) {
+                }
+
+            })
     }
 
     fun setNoiseCancellationAccordingToTemplateIfPreviewUnset(roleName: String?) {

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import live.hms.roomkit.R
 import live.hms.roomkit.databinding.ListItemChatBinding
+import live.hms.roomkit.loadWithGlideCircleCrop
 import live.hms.roomkit.setOnSingleClickListener
 import live.hms.roomkit.ui.theme.applyTheme
 import java.text.SimpleDateFormat
@@ -79,6 +80,8 @@ class ChatAdapter(private val openMessageOptions : (ChatMessage) -> Unit,
 
 
         viewMore.visibility = if(shouldShowMessageOptions(sentMessage)) View.VISIBLE else View.GONE
+
+        image.loadWithGlideCircleCrop(sentMessage.senderPeerImage, R.drawable.user_image_placeholder)
       }
     }
   }

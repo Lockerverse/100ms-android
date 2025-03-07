@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import live.hms.roomkit.ui.meeting.chat.ChatMessage.User
 import live.hms.video.error.HMSException
 import live.hms.video.sdk.HMSMessageResultListener
 import live.hms.video.sdk.HMSSDK
@@ -58,7 +60,8 @@ class ChatViewModel(private val hmssdk: HMSSDK) : ViewModel() {
                     ),
                     senderPeerId = hmssdk.getLocalPeer()?.peerID,
                     senderRoleName = hmssdk.getLocalPeer()?.hmsRole?.name,
-                    userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID ?: ""
+                    userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID ?: "",
+                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java).image
                 )
             )
 
@@ -80,7 +83,8 @@ class ChatViewModel(private val hmssdk: HMSSDK) : ViewModel() {
                     ),
                     senderPeerId = hmssdk.getLocalPeer()?.peerID,
                     senderRoleName = hmssdk.getLocalPeer()?.hmsRole?.name,
-                    userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID ?: ""
+                    userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID ?: "",
+                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java).image
                 ), recipient.peer
             )
 
@@ -102,7 +106,9 @@ class ChatViewModel(private val hmssdk: HMSSDK) : ViewModel() {
                     ),
                     senderPeerId = hmssdk.getLocalPeer()?.peerID,
                     senderRoleName = hmssdk.getLocalPeer()?.hmsRole?.name,
-                    userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID
+                    userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID,
+                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java).image
+
                 ), recipient.role
             )
         }

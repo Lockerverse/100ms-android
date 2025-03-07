@@ -791,6 +791,7 @@ fun ChatPreview() {
         null,
         null,
         null,
+        null,
         null
     )
     val messages = listOf(
