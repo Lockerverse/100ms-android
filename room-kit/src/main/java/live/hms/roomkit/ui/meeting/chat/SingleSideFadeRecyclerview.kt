@@ -25,7 +25,7 @@ class SingleSideFadeRecyclerview  @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if(isHeightContrained) {
             var newSpec = heightMeasureSpec
-            newSpec = MeasureSpec.makeMeasureSpec(300.dp(), MeasureSpec.AT_MOST)
+            newSpec = MeasureSpec.makeMeasureSpec(150.dp(), MeasureSpec.AT_MOST)
             super.onMeasure(widthMeasureSpec, newSpec)
         } else super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }

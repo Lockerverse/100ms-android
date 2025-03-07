@@ -41,6 +41,7 @@
         app:layout_constraintStart_toEndOf="@id/name"
         tools:text="@string/chat_to_dm_label"
         />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
@@ -52,6 +53,7 @@
         android:singleLine="true"
         android:textAllCaps="true"
         android:textSize="12sp"
+        android:visibility="gone"
         app:fontFamily="@font/inter_regular"
         app:layout_constraintBaseline_toBaselineOf="@id/name"
         app:layout_constraintEnd_toStartOf="@id/viewMore"
