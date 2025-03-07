@@ -61,7 +61,7 @@ class ChatViewModel(private val hmssdk: HMSSDK) : ViewModel() {
                     senderPeerId = hmssdk.getLocalPeer()?.peerID,
                     senderRoleName = hmssdk.getLocalPeer()?.hmsRole?.name,
                     userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID ?: "",
-                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java).image
+                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java)?.image
                 )
             )
 
@@ -84,7 +84,7 @@ class ChatViewModel(private val hmssdk: HMSSDK) : ViewModel() {
                     senderPeerId = hmssdk.getLocalPeer()?.peerID,
                     senderRoleName = hmssdk.getLocalPeer()?.hmsRole?.name,
                     userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID ?: "",
-                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java).image
+                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java)?.image
                 ), recipient.peer
             )
 
@@ -107,7 +107,7 @@ class ChatViewModel(private val hmssdk: HMSSDK) : ViewModel() {
                     senderPeerId = hmssdk.getLocalPeer()?.peerID,
                     senderRoleName = hmssdk.getLocalPeer()?.hmsRole?.name,
                     userIdForBlockList = hmssdk.getLocalPeer()?.customerUserID,
-                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java).image
+                    senderPeerImage = Gson().fromJson(hmssdk.getLocalPeer()?.metadata, User::class.java)?.image
 
                 ), recipient.role
             )

@@ -62,7 +62,7 @@ data class ChatMessage constructor(
         message.sender?.peerID,
         message.sender?.hmsRole?.name,
         message.sender?.customerUserID,
-        Gson().fromJson(message.sender?.metadata, User::class.java).image
+        Gson().fromJson(message.sender?.metadata, User::class.java)?.image
     )
 
     data class User(
