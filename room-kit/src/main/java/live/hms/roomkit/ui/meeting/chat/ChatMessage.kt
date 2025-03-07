@@ -4,6 +4,7 @@ import live.hms.video.sdk.models.HMSMessage
 import live.hms.video.sdk.models.enums.HMSMessageRecipientType
 import live.hms.video.sdk.models.role.HMSRole
 import android.os.Parcelable
+import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
 import live.hms.roomkit.ui.meeting.chat.rbac.RecipientItem
 import live.hms.video.sdk.models.HMSMessageRecipient
@@ -26,6 +27,7 @@ data class ChatMessage constructor(
     val senderPeerId : String?,
     val senderRoleName : String?,
     val userIdForBlockList : String?,
+    val senderPeerImage : String?
 )  : Parcelable {
     companion object {
         fun sendTo(recipient: HMSMessageRecipient, sentByMe: Boolean, sentToMe: Boolean) : String? =
@@ -59,7 +61,11 @@ data class ChatMessage constructor(
         toGroup = sendTo(message.recipient, sentByMe, sentToMe),
         message.sender?.peerID,
         message.sender?.hmsRole?.name,
-        message.sender?.customerUserID
+        message.sender?.customerUserID,
+        Gson().fromJson(message.sender?.metadata, User::class.java)?.image
     )
 
+    data class User(
+        val image: String? = null
+    )
 }

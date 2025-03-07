@@ -17,11 +17,14 @@ import android.view.accessibility.AccessibilityManager
 import android.view.animation.Interpolator
 import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.content.FileProvider
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import live.hms.roomkit.helpers.OnSingleClickListener
 import live.hms.video.media.capturers.camera.CameraControl
 import live.hms.video.media.settings.HMSSimulcastLayerDefinition
@@ -412,4 +415,15 @@ fun HMSVideoView.setCameraGestureListener(track : HMSVideoTrack?,onImageCapture 
     }
 
 
+}
+
+fun ImageView.loadWithGlideCircleCrop(url: String?, @DrawableRes placeholderId: Int? = null) {
+    Glide.with(this.context.applicationContext).load(url).also { glideRequest ->
+        placeholderId?.let {
+            glideRequest.placeholder(it)
+        }
+        glideRequest
+            .apply(RequestOptions.circleCropTransform())
+            .into(this)
+    }
 }
