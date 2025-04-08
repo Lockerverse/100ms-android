@@ -1,20 +1,23 @@
 package live.hms.roomkit.ui.meeting.chat
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.getstream.chat.android.ui.font.TextStyle
+import live.hms.prebuilt_themes.dp
 import live.hms.roomkit.R
 import live.hms.roomkit.databinding.ListItemChatBinding
-import live.hms.roomkit.loadWithGlideCircleCrop
+import live.hms.roomkit.gone
 import live.hms.roomkit.setOnSingleClickListener
+import live.hms.roomkit.show
 import live.hms.roomkit.ui.theme.applyTheme
+import live.hms.roomkit.util.initials
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class ChatAdapter(private val openMessageOptions : (ChatMessage) -> Unit,
                   val onClick: () -> Unit = {},
@@ -81,7 +84,21 @@ class ChatAdapter(private val openMessageOptions : (ChatMessage) -> Unit,
 
         viewMore.visibility = if(shouldShowMessageOptions(sentMessage)) View.VISIBLE else View.GONE
 
-        image.loadWithGlideCircleCrop(sentMessage.senderPeerImage, R.drawable.user_image_placeholder)
+        val profilePlaceholder = AvatarPlaceholderDrawable(
+          binding.root.context,
+          if (sentMessage.isSentByMe) {
+            sentMessage.localSenderRealNameForPinMessage.initials()
+          } else {
+            sentMessage.senderName.initials()
+          },
+          TextStyle(size = 16.dp(), color = Color.BLACK)
+        )
+        binding.ivAvatar.setAvatar(sentMessage.senderPeerMetadata?.image, profilePlaceholder)
+        if (sentMessage.senderPeerMetadata?.verified == true) {
+          binding.ivAvatarVerified.show()
+        } else {
+          binding.ivAvatarVerified.gone()
+        }
       }
     }
   }

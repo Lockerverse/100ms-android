@@ -172,4 +172,8 @@
     <style name="RoundedBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="StreamUiUserAvatarStyleTransparentBorder" parent="StreamUiBaseAvatarStyle">
+        <item name="streamUiAvatarBorderColor">@android:color/transparent</item>
+    </style>
 </resources>
