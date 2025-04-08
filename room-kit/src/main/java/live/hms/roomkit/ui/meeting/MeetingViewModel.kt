@@ -1347,7 +1347,7 @@ class MeetingViewModel(
 
     fun updateUserImage() {
         val newMetadata =
-            "{\"image\": \"${prebuiltOptions?.userImage}\"}"
+            "{\"image\": \"${prebuiltOptions?.userImage}\",\"verified\": ${prebuiltOptions?.userVerified}}"
         hmsSDK.changeMetadata(
             newMetadata,
             object : HMSActionResultListener {

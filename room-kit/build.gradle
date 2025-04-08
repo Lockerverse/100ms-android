@@ -121,15 +121,18 @@ dependencies {
     implementation 'androidx.compose.foundation:foundation'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
-// UI Tests
+    // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-// Optional - Integration with ViewModels
+    // Optional - Integration with ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
     // Optional - Integration with LiveData
     implementation "androidx.compose.ui:ui-viewbinding:1.3.2"
     implementation 'androidx.compose.runtime:runtime-livedata'
     implementation "com.github.bumptech.glide:compose:1.0.0-beta01"
+
+    // GetStream
+    implementation "io.getstream:stream-chat-android-ui-components:6.4.0"
 
 }
 
