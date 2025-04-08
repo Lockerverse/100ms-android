@@ -86,11 +86,11 @@ class ChatAdapter(private val openMessageOptions : (ChatMessage) -> Unit,
 
         val profilePlaceholder = AvatarPlaceholderDrawable(
           binding.root.context,
-          if (sentMessage.isSentByMe) {
-            sentMessage.localSenderRealNameForPinMessage.initials()
+          (if (sentMessage.isSentByMe) {
+            sentMessage.localSenderRealNameForPinMessage
           } else {
-            sentMessage.senderName.initials()
-          },
+            sentMessage.senderName
+          }).initials(),
           TextStyle(size = 16.dp(), color = Color.BLACK)
         )
         binding.ivAvatar.setAvatar(sentMessage.senderPeerMetadata?.image, profilePlaceholder)
