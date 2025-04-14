@@ -6,7 +6,7 @@ import live.hms.video.plugin.video.HMSVideoPluginType
 import live.hms.video.plugin.video.virtualbackground.HmsVirtualBackgroundInterface
 import live.hms.video.plugin.video.virtualbackground.VideoFrameInfoListener
 import live.hms.video.sdk.HMSPluginResultListener
-import org.webrtc.VideoFrame
+import hms.webrtc.VideoFrame
 
 class FakeVirtualBackground : HmsVirtualBackgroundInterface {
     private fun loggingIgnore(method : String) {

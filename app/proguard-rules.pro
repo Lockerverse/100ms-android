@@ -30,5 +30,5 @@
 -keep class * extends androidx.fragment.app.Fragment{}
 
 # Previously required proguard rules for sdk, now included in the library.
-#-keep class org.webrtc.** { *; }
+#-keep class hms.webrtc.** { *; }
 #-keep class live.hms.video.** { *; }
