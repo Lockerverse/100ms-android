@@ -656,6 +656,7 @@ class PreviewFragment : Fragment() {
                     binding.editTextName.setText(
                         room.localPeer?.name.orEmpty(), TextView.BufferType.EDITABLE
                     )
+                    binding.editTextName.setSelection(room.localPeer?.name.orEmpty().length)
                     nameEditText = room.localPeer?.name.orEmpty()
                     enableDisableJoinNowButton()
                     setTextOnce = true

@@ -434,7 +434,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/button_join_meeting"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/btn_txt_guideline"
-                app:layout_constraintTop_toTopOf="@+id/edit_container_name"
+                app:layout_constraintTop_toTopOf="@id/btn_txt_guideline"
                 app:layout_constraintVertical_bias="0.0">
 
                 <ProgressBar
@@ -463,7 +463,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/btn_txt_guideline"
-                app:layout_constraintTop_toTopOf="@+id/edit_container_name"
+                app:layout_constraintTop_toTopOf="@id/btn_txt_guideline"
                 app:layout_constraintVertical_bias="0.0" />
 
             <androidx.constraintlayout.widget.Guideline
