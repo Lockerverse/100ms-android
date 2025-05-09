@@ -1197,6 +1197,10 @@ class MeetingFragment : Fragment() {
         binding.iconSend.setOnSingleClickListener {
             val messageStr = binding.editTextMessage.text.toString().trim()
             if (messageStr.isNotEmpty()) {
+                if (messageStr.length >= 2000) {
+                    meetingViewModel.triggerErrorNotification("Message length should be less than 2000 characters")
+                    return@setOnSingleClickListener
+                }
                 chatViewModel.sendMessage(messageStr)
                 binding.editTextMessage.setText("")
             }
