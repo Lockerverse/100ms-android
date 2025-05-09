@@ -21,7 +21,7 @@ import live.hms.roomkit.util.visibility
 import live.hms.video.sdk.models.HMSPeer
 import live.hms.video.sdk.models.HMSPeerType
 import live.hms.video.sdk.models.enums.HMSPeerUpdate
-import org.webrtc.RendererCommon
+import hms.webrtc.RendererCommon
 
 class VideoListAdapter(
   private val onVideoItemClick: (item: MeetingTrack) -> Unit,

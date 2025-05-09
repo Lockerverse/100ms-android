@@ -20,7 +20,7 @@ import live.hms.roomkit.ui.settings.SettingsStore
 import live.hms.roomkit.util.*
 import live.hms.video.sdk.models.enums.HMSPeerUpdate
 import live.hms.videoview.HMSVideoView
-import org.webrtc.RendererCommon
+import hms.webrtc.RendererCommon
 
 class PinnedVideoFragment : Fragment() {
 

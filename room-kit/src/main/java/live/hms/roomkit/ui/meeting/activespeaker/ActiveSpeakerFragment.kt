@@ -19,8 +19,8 @@ import live.hms.video.media.tracks.HMSRemoteVideoTrack
 import live.hms.video.media.tracks.HMSVideoTrack
 import live.hms.video.sdk.models.enums.HMSPeerUpdate
 import live.hms.video.utils.HMSLogger
-import org.webrtc.RendererCommon
-import org.webrtc.SurfaceViewRenderer
+import hms.webrtc.RendererCommon
+import hms.webrtc.SurfaceViewRenderer
 
 class ActiveSpeakerFragment : VideoGridBaseFragment() {
 

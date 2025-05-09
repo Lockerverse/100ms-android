@@ -31,7 +31,7 @@ import live.hms.video.sdk.models.HMSPeer
 import live.hms.video.sdk.models.HMSPeerType
 import live.hms.video.sdk.models.HMSRemotePeer
 import live.hms.video.sdk.models.HMSSpeaker
-import org.webrtc.ContextUtils.getApplicationContext
+import hms.webrtc.ContextUtils.getApplicationContext
 
 class ParticipantItem(
     private val hmsPeer: HMSPeer,
