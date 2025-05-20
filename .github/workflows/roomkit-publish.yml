@@ -29,8 +29,8 @@ jobs:
       run: |
         pwd
         ls -l secrets/
-        head -n 5 secrets/secring.pgp
-        file secrets/secring.pgp
+        head -n 5 secrets/secring.gpg
+        file secrets/secring.gpg
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
