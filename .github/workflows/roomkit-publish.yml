@@ -23,7 +23,7 @@ jobs:
       run: echo "${{github.ref_name}}"
 
     - name: Decrypt the artefact signing key
-      run: gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.MAVEN_ARTIFACT_SIGNING_KEY }}" --output secrets/private.pgp secrets/private.pgp.gpg
+      run: gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" --output secrets/private.pgp secrets/private.pgp.gpg
 
     - name: Debug GPG key
       run: |
@@ -36,5 +36,6 @@ jobs:
       run: chmod +x gradlew
 
     - name: Deploy to Maven Central live.100ms (Sonatype)
-      run: ./gradlew clean publishToSonatype closeAndReleaseSonatypeStagingRepository -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ANDROID_ROOM_KIT_SIGNING_PASSWORD }}" -Psigning.secretKeyRingFile="../secrets/private.pgp" -PTOKEN_ENDPOINT="\"​\""
+#      run: ./gradlew clean publishToSonatype closeAndReleaseSonatypeStagingRepository -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="62C0C2F9" -Psigning.password="${{ secrets.ANDROID_ROOM_KIT_SIGNING_PASSWORD }}" -Psigning.secretKeyRingFile="../secrets/private.pgp" -PTOKEN_ENDPOINT="\"​\""
+      run: ./gradlew clean publishToSonatype closeAndReleaseSonatypeStagingRepository -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/private.pgp" -PTOKEN_ENDPOINT="\"​\""
 
