@@ -78,7 +78,7 @@ dependencies {
     implementation "live.100ms:android-sdk:$HMS_SDK_VERSION"
     implementation "live.100ms:video-view:$HMS_SDK_VERSION"
     implementation "live.100ms:hls-player:$HMS_SDK_VERSION"
-    implementation "live.100ms:video-filters:$HMS_SDK_VERSION"
+//    implementation "live.100ms:video-filters:$HMS_SDK_VERSION"
     // allows the api to be present so the [HMsVirtualBackgroundInjector] can add the real
     // class when it is included but also allows the fake one to be injected when
     // the import is not added. This saves 26Mb from being added to every prebuilt user.
