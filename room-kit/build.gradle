@@ -145,12 +145,14 @@ afterEvaluate {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.release
+                
+                // Only sign the artefacts if this is a maven central build.
+                // This would only halt jitpack builds and/or make our signing keys public.
+                if(rootProject.properties["ossrhUsername"]) {
+                    artifact javadocJar
+                }
+                
                 pom {
-                    // Only sign the artefacts if this is a maven central build.
-                    // This would only halt jitpack builds and/or make our signing keys public.
-                    if(rootProject.properties["ossrhUsername"]) {
-                        artifact javadocJar
-                    }
                     name = "100ms.live Android Room Kit"
                     description = "Room Kit that simplifies setting up videoconferencing in your own app. See more at https://www.100ms.live/docs/android/v2/guides/quickstart"
                     url = "100ms.live"
@@ -181,7 +183,6 @@ afterEvaluate {
     }
 
     if(rootProject.properties["ossrhUsername"]) {
-        artifact javadocJar
         signing {
             sign publishing.publications
         }
