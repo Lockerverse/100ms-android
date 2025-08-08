@@ -129,7 +129,7 @@ class FilterBottomSheet(
 
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                when (currentSelectedFilter) {
+                /*when (currentSelectedFilter) {
                     is VideoFilter.Blur -> {
                         currentSelectedFilter = VideoFilter.Blur
                     }
@@ -143,7 +143,7 @@ class FilterBottomSheet(
                     is VideoFilter.Smoothness -> meetingViewModel.filterPlugin.setSmoothness(progress / 100f)
                     null -> {}
                     else -> {}
-                }
+                }*/
 
             }
 

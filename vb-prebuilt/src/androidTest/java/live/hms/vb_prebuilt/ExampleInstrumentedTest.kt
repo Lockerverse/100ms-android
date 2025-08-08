@@ -3,10 +3,10 @@ package live.hms.vb_prebuilt
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
-import hms.junit.Test
-import hms.junit.runner.RunWith
+import org.junit.Test
+import org.junit.runner.RunWith
 
-import hms.junit.Assert.*
+import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.

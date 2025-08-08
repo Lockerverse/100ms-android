@@ -1,9 +1,9 @@
 package live.hms.app2.util
 
-import hms.hamcrest.CoreMatchers.equalTo
-import hms.hamcrest.MatcherAssert
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert
 import live.hms.roomkit.util.NameUtils
-import hms.junit.Test
+import org.junit.Test
 
 class NameUtilsTest {
 

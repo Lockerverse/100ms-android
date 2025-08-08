@@ -1,9 +1,9 @@
 package live.hms.app2.ui.meeting
 
 import live.hms.roomkit.ui.meeting.CustomPeerMetadata
-import hms.hamcrest.MatcherAssert.assertThat
-import hms.hamcrest.Matchers.equalTo
-import hms.junit.Test
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.junit.Test
 
 class CustomPeerMetadataTest{
 

@@ -1,4 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: 'mavencentral-properties.gradle'
+
 buildscript {
     ext.kotlin_version = '1.8.22'
     repositories {
@@ -27,7 +29,6 @@ buildscript {
 allprojects {
     repositories {
 
-
         google()
         mavenCentral()
         maven {
@@ -40,4 +41,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-apply from: "${rootDir}/mavencentral-publish.gradle"
