@@ -1,8 +1,8 @@
 package live.hms.app2
 
-import hms.junit.Test
+import org.junit.Test
 
-import hms.junit.Assert.*
+import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
