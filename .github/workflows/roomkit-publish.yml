@@ -56,11 +56,16 @@ jobs:
       run: chmod +x gradlew
 
     - name: Deploy to Maven Central live.100ms
-      run: ./gradlew :room-kit:publishToMavenLocal -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/secring.gpg" -PTOKEN_ENDPOINT="\"​\""
+      run: |
+        ./gradlew :prebuilt-themes:publishToMavenLocal -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/secring.gpg" -PTOKEN_ENDPOINT="\"​\""
+        ./gradlew :vb-prebuilt:publishToMavenLocal -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/secring.gpg" -PTOKEN_ENDPOINT="\"​\""
+        ./gradlew :room-kit:publishToMavenLocal -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/secring.gpg" -PTOKEN_ENDPOINT="\"​\""
 
     - name: Create deployment bundle
       run: |
         VERSION="${{ github.ref_name }}"
+        
+        # Process room-kit module
         ARTIFACT_ID="room-kit"
         GROUP_PATH="live/100ms/$ARTIFACT_ID/$VERSION"
         
@@ -81,15 +86,55 @@ jobs:
         [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar bundle/$GROUP_PATH/
         [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc bundle/$GROUP_PATH/
         
-        # Generate checksums
-          for file in bundle/$GROUP_PATH/*; do
-            if [[ ! "$file" =~ \.(md5|sha1|sha256|sha512|asc)$ ]]; then
-              md5sum "$file" | awk '{print $1}' > "$file.md5"
-              sha1sum "$file" | awk '{print $1}' > "$file.sha1"
-              sha256sum "$file" | awk '{print $1}' > "$file.sha256"
-              sha512sum "$file" | awk '{print $1}' > "$file.sha512"
-            fi
-          done
+        # Process prebuilt-themes module
+        ARTIFACT_ID="prebuilt-themes"
+        GROUP_PATH="live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        mkdir -p bundle/$GROUP_PATH
+        
+        LOCAL_REPO="$HOME/.m2/repository/live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        # Copy all artifacts and their signatures
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar.asc bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom.asc bundle/$GROUP_PATH/
+        
+        # Copy sources and javadoc if they exist
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc bundle/$GROUP_PATH/
+        
+        # Process virtual-background-bottomsheet module
+        ARTIFACT_ID="virtual-background-bottomsheet"
+        GROUP_PATH="live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        mkdir -p bundle/$GROUP_PATH
+        
+        LOCAL_REPO="$HOME/.m2/repository/live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        # Copy all artifacts and their signatures
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar.asc bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom.asc bundle/$GROUP_PATH/
+        
+        # Copy sources and javadoc if they exist
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc bundle/$GROUP_PATH/
+        
+        # Generate checksums for all files
+        for file in bundle/**/*; do
+          if [[ -f "$file" && ! "$file" =~ \.(md5|sha1|sha256|sha512|asc)$ ]]; then
+            md5sum "$file" | awk '{print $1}' > "$file.md5"
+            sha1sum "$file" | awk '{print $1}' > "$file.sha1"
+            sha256sum "$file" | awk '{print $1}' > "$file.sha256"
+            sha512sum "$file" | awk '{print $1}' > "$file.sha512"
+          fi
+        done
         
         # Finally zip the bundle
         cd bundle
