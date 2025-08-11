@@ -126,14 +126,14 @@ class PrebuiltInfoContainer(private val hmssdk: HMSSDK) {
     }
 
     fun shouldSkipPreview(): Boolean {
-        return hmsRoomLayout?.data?.get(0)?.screens?.preview?.skipPreview == true
+        return hmsRoomLayout?.data?.firstOrNull()?.screens?.preview?.skipPreview == true
     }
 
     fun getLiveStreamingHeaderTitle() : String? {
         val localPeer = hmssdk.getLocalPeer()
 
         return if (localPeer == null) {
-            hmsRoomLayout?.data?.get(0)?.screens?.conferencing?.hlsLiveStreaming?.elements
+            hmsRoomLayout?.data?.firstOrNull()?.screens?.conferencing?.hlsLiveStreaming?.elements
                 ?.hlsLiveStreamingHeader?.title
         } else {
             roleMap[localPeer.hmsRole.name]?.screens?.conferencing?.hlsLiveStreaming?.elements
@@ -145,7 +145,7 @@ class PrebuiltInfoContainer(private val hmssdk: HMSSDK) {
         val localPeer = hmssdk.getLocalPeer()
 
         return if (localPeer == null) {
-            hmsRoomLayout?.data?.get(0)?.screens?.conferencing?.hlsLiveStreaming?.elements
+            hmsRoomLayout?.data?.firstOrNull()?.screens?.conferencing?.hlsLiveStreaming?.elements
                 ?.hlsLiveStreamingHeader?.description
         } else {
             roleMap[localPeer.hmsRole.name]?.screens?.conferencing?.hlsLiveStreaming?.elements
@@ -156,7 +156,7 @@ class PrebuiltInfoContainer(private val hmssdk: HMSSDK) {
     fun handRaiseAvailable() : Boolean {
         val localPeer = hmssdk.getLocalPeer()
         val available =  if (localPeer == null) {
-            hmsRoomLayout?.data?.get(0)?.screens?.conferencing?.hlsLiveStreaming?.elements
+            hmsRoomLayout?.data?.firstOrNull()?.screens?.conferencing?.hlsLiveStreaming?.elements
                 ?.handRaise != null
         } else {
             roleMap[localPeer.hmsRole.name]?.screens?.conferencing?.hlsLiveStreaming
@@ -173,7 +173,7 @@ class PrebuiltInfoContainer(private val hmssdk: HMSSDK) {
         }
         val localPeer = hmssdk.getLocalPeer()
         val available =  if (localPeer == null) {
-            hmsRoomLayout?.data?.get(0)?.screens?.preview?.default?.elements?.noiseCancellationElement?.enabled
+            hmsRoomLayout?.data?.firstOrNull()?.screens?.preview?.default?.elements?.noiseCancellationElement?.enabled
         } else {
             roleMap[localPeer.hmsRole.name]?.screens?.preview?.default?.elements?.noiseCancellationElement?.enabled
         }
@@ -190,7 +190,7 @@ class PrebuiltInfoContainer(private val hmssdk: HMSSDK) {
     fun vbEnabledState() : VbState {
         val localPeer = hmssdk.getLocalPeer()
         val isVbEnabled = if (localPeer == null) {
-            hmsRoomLayout?.data?.get(0)?.screens?.conferencing?.default?.elements
+            hmsRoomLayout?.data?.firstOrNull()?.screens?.conferencing?.default?.elements
                 ?.virtualBackground != null
         } else {
             roleMap[localPeer.hmsRole.name]?.screens?.conferencing?.default?.elements
@@ -198,7 +198,7 @@ class PrebuiltInfoContainer(private val hmssdk: HMSSDK) {
         }
 
         val defaultVbUrl =if (localPeer == null) {
-            hmsRoomLayout?.data?.get(0)?.screens?.conferencing?.default?.elements
+            hmsRoomLayout?.data?.firstOrNull()?.screens?.conferencing?.default?.elements
                 ?.virtualBackground?.backgroundMedia?.find { it.default == true }?.url
         } else {
             roleMap[localPeer.hmsRole.name]?.screens?.conferencing?.default?.elements
@@ -206,7 +206,7 @@ class PrebuiltInfoContainer(private val hmssdk: HMSSDK) {
         }
 
         val vbBackgroundImagesList = if (localPeer == null) {
-            hmsRoomLayout?.data?.get(0)?.screens?.conferencing?.default?.elements
+            hmsRoomLayout?.data?.firstOrNull()?.screens?.conferencing?.default?.elements
                 ?.virtualBackground?.backgroundMedia?.mapNotNull { it.url }
         } else {
             roleMap[localPeer.hmsRole.name]?.screens?.conferencing?.default?.elements
