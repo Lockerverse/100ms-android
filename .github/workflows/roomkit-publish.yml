@@ -127,8 +127,8 @@ jobs:
         [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc bundle/$GROUP_PATH/
         
         # Generate checksums for all files
-        for file in bundle/**/*; do
-          if [[ -f "$file" && ! "$file" =~ \.(md5|sha1|sha256|sha512|asc)$ ]]; then
+        find bundle -type f | while read file; do
+          if [[ ! "$file" =~ \.(md5|sha1|sha256|sha512|asc)$ ]]; then
             md5sum "$file" | awk '{print $1}' > "$file.md5"
             sha1sum "$file" | awk '{print $1}' > "$file.sha1"
             sha256sum "$file" | awk '{print $1}' > "$file.sha256"
