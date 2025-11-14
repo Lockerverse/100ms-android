@@ -78,7 +78,7 @@ dependencies {
     implementation "live.100ms:android-sdk:$HMS_SDK_VERSION"
     implementation "live.100ms:video-view:$HMS_SDK_VERSION"
     implementation "live.100ms:hls-player:$HMS_SDK_VERSION"
-    implementation "live.100ms:video-filters:$HMS_SDK_VERSION"
+//    implementation "live.100ms:video-filters:$HMS_SDK_VERSION"
     // allows the api to be present so the [HMsVirtualBackgroundInjector] can add the real
     // class when it is included but also allows the fake one to be injected when
     // the import is not added. This saves 26Mb from being added to every prebuilt user.
@@ -148,15 +148,14 @@ afterEvaluate {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.release
+                
+                // Only sign the artefacts if this is a maven central build.
+                // This would only halt jitpack builds and/or make our signing keys public.
+                if(rootProject.properties["ossrhUsername"]) {
+                    artifact javadocJar
+                }
+                
                 pom {
-                    // Only sign the artefacts if this is a maven central build.
-                    // This would only halt jitpack builds and/or make our signing keys public.
-                    if(rootProject.properties["ossrhUsername"]) {
-                        artifact javadocJar
-                        signing {
-                            sign publishing.publications
-                        }
-                    }
                     name = "100ms.live Android Room Kit"
                     description = "Room Kit that simplifies setting up videoconferencing in your own app. See more at https://www.100ms.live/docs/android/v2/guides/quickstart"
                     url = "100ms.live"
@@ -183,6 +182,12 @@ afterEvaluate {
                 artifactId = 'room-kit'
                 version = getVersionName()
             }
+        }
+    }
+
+    if(rootProject.properties["ossrhUsername"]) {
+        signing {
+            sign publishing.publications
         }
     }
 }

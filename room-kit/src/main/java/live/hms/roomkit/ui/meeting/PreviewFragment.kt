@@ -652,7 +652,10 @@ class PreviewFragment : Fragment() {
                 if (setTextOnce.not()) {
                     setupUI(room.localPeer?.hmsRole?.name.orEmpty())
                     binding.nameInitials.visibility = View.VISIBLE
-                    room.localPeer?.name?.let { binding.nameInitials.text = NameUtils.getInitials(room.localPeer?.name.orEmpty())  }
+                    if (room.localPeer?.name.isNullOrEmpty().not()) {
+                        binding.nameInitials.text = NameUtils.getInitials(room.localPeer?.name.orEmpty())
+                    }
+
                     binding.editTextName.setText(
                         room.localPeer?.name.orEmpty(), TextView.BufferType.EDITABLE
                     )

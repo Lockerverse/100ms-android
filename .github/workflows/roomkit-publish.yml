@@ -23,11 +23,170 @@ jobs:
       run: echo "${{github.ref_name}}"
 
     - name: Decrypt the artefact signing key
-      run: gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.ANDROID_ROOM_KIT_SONATYPE_PRIVATE_KEY_DECRYPT_PASSWORD }}" --output secrets/private.pgp secrets/private.pgp.gpg
+      run: gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" --output secrets/secring.gpg secrets/secring.gpg.gpg
+
+    - name: Import GPG key
+      run: |
+        # Configure GPG for non-interactive use
+        export GPG_TTY=$(tty)
+        echo "use-agent" >> ~/.gnupg/gpg.conf
+        echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+        echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+
+        # Kill any existing gpg-agent
+        pkill -f gpg-agent || true
+
+        # Import the key with batch mode
+        gpg --batch --import secrets/secring.gpg
+
+        # List keys to verify import
+        echo "=== Public keys ==="
+        gpg --list-keys
+        echo "=== Secret keys ==="
+        gpg --list-secret-keys
+
+    - name: Debug GPG key
+      run: |
+        pwd
+        ls -l secrets/
+        head -n 5 secrets/secring.gpg
+        file secrets/secring.gpg
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Deploy to Maven Central live.100ms (Sonatype)
-      run: ./gradlew clean publishToSonatype closeAndReleaseSonatypeStagingRepository -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="62C0C2F9" -Psigning.password="${{ secrets.ANDROID_ROOM_KIT_SIGNING_PASSWORD }}" -Psigning.secretKeyRingFile="../secrets/private.pgp" -PTOKEN_ENDPOINT="\"​\""
+    - name: Deploy to Maven Central live.100ms
+      run: |
+        ./gradlew :prebuilt-themes:publishToMavenLocal -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/secring.gpg" -PTOKEN_ENDPOINT="\"​\""
+        ./gradlew :vb-prebuilt:publishToMavenLocal -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/secring.gpg" -PTOKEN_ENDPOINT="\"​\""
+        ./gradlew :room-kit:publishToMavenLocal -PhmsRoomKitGroup="live.100ms" -PHMS_ROOM_KIT_VERSION="${{github.ref_name}}" -PossrhUsername="${{ secrets.ANDROID_SONATYPE_USERNAME}}" -PossrhPassword="${{ secrets.ANDROID_SONATYPE_PASSWORD}}" -Psigning.keyId="D00FAF9F" -Psigning.password="${{ secrets.ROOM_KIT_SECRET_KEY_PASSPHRASE }}" -Psigning.secretKeyRingFile="../secrets/secring.gpg" -PTOKEN_ENDPOINT="\"​\""
+
+    - name: Create deployment bundle
+      run: |
+        VERSION="${{ github.ref_name }}"
+        
+        # Process room-kit module
+        ARTIFACT_ID="room-kit"
+        GROUP_PATH="live/100ms/$ARTIFACT_ID/$VERSION"
+        
+        mkdir -p bundle/$GROUP_PATH
+        
+        # Now copy from local Maven repository where everything is properly structured
+        LOCAL_REPO="$HOME/.m2/repository/live/100ms/$ARTIFACT_ID/$VERSION"
+        
+        # Copy all artifacts and their signatures
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar.asc bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom.asc bundle/$GROUP_PATH/
+        
+        # Copy sources and javadoc if they exist
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc bundle/$GROUP_PATH/
+        
+        # Process prebuilt-themes module
+        ARTIFACT_ID="prebuilt-themes"
+        GROUP_PATH="live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        mkdir -p bundle/$GROUP_PATH
+        
+        LOCAL_REPO="$HOME/.m2/repository/live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        # Copy all artifacts and their signatures
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar.asc bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom.asc bundle/$GROUP_PATH/
+        
+        # Copy sources and javadoc if they exist
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc bundle/$GROUP_PATH/
+        
+        # Process virtual-background-bottomsheet module
+        ARTIFACT_ID="virtual-background-bottomsheet"
+        GROUP_PATH="live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        mkdir -p bundle/$GROUP_PATH
+        
+        LOCAL_REPO="$HOME/.m2/repository/live/100ms/room-kit/$ARTIFACT_ID/$VERSION"
+        
+        # Copy all artifacts and their signatures
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.aar.asc bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom bundle/$GROUP_PATH/
+        cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}.pom.asc bundle/$GROUP_PATH/
+        
+        # Copy sources and javadoc if they exist
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-sources.jar.asc bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar bundle/$GROUP_PATH/
+        [ -f "$LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc" ] && cp $LOCAL_REPO/${ARTIFACT_ID}-${VERSION}-javadoc.jar.asc bundle/$GROUP_PATH/
+        
+        # Generate checksums for all files
+        find bundle -type f | while read file; do
+          if [[ ! "$file" =~ \.(md5|sha1|sha256|sha512|asc)$ ]]; then
+            md5sum "$file" | awk '{print $1}' > "$file.md5"
+            sha1sum "$file" | awk '{print $1}' > "$file.sha1"
+            sha256sum "$file" | awk '{print $1}' > "$file.sha256"
+            sha512sum "$file" | awk '{print $1}' > "$file.sha512"
+          fi
+        done
+        
+        # Finally zip the bundle
+        cd bundle
+        zip -r ../bundle.zip .
+
+    - name: Upload to Central Publishing Portal
+      id: upload
+      run: |
+        echo "=== Uploading bundle to Central Publishing Portal ==="
+        
+        # Check if bundle exists and its size
+        if [ -f "bundle.zip" ]; then
+          echo "Bundle size: $(ls -lh bundle.zip | awk '{print $5}')"
+          echo "Bundle contents:"
+          unzip -l bundle.zip
+        else
+          echo "ERROR: bundle.zip not found"
+          exit 1
+        fi
+        
+        # Upload bundle and capture plain text deployment ID
+        DEPLOYMENT_ID=$(curl -s -X POST \
+          -H "Authorization: Bearer ${{ secrets.SONATYPE_BASE64_TOKEN }}" \
+          -F bundle=@bundle.zip \
+          "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC")
+        
+        echo "Deployment ID: $DEPLOYMENT_ID"
+        
+        if [ -z "$DEPLOYMENT_ID" ]; then
+          echo "❌ ERROR: Empty deployment ID returned"
+          exit 1
+        fi
+        
+        echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+
+    - name: Wait for publishing to complete
+      run: |
+        for i in {1..30}; do
+          STATUS=$(curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.SONATYPE_BASE64_TOKEN }}" \
+            "https://central.sonatype.com/api/v1/publisher/status?id=${{ steps.upload.outputs.deployment_id }}" \
+            | jq -r .deploymentState)
+        
+          echo "Status: $STATUS"
+          if [[ "$STATUS" == "PUBLISHED" ]]; then
+            echo "✅ Published successfully!"
+            break
+          elif [[ "$STATUS" == "FAILED" ]]; then
+            echo "❌ Publishing failed."
+            exit 1
+          fi
+        
+          sleep 10
+        done
 

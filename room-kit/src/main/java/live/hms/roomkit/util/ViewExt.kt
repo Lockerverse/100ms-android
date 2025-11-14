@@ -34,8 +34,8 @@ import live.hms.video.media.tracks.HMSLocalVideoTrack
 import live.hms.video.media.tracks.HMSRemoteVideoTrack
 import live.hms.video.media.tracks.HMSVideoTrack
 import live.hms.videoview.HMSVideoView
-import org.webrtc.EglRenderer
-import org.webrtc.SurfaceViewRenderer
+import hms.webrtc.EglRenderer
+import hms.webrtc.SurfaceViewRenderer
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.roundToInt

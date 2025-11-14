@@ -37,8 +37,8 @@ import live.hms.video.sdk.models.HMSPeerType
 import live.hms.video.sdk.models.HMSSpeaker
 import live.hms.video.sdk.models.enums.HMSPeerUpdate
 import live.hms.videoview.HMSVideoView
-import org.webrtc.RendererCommon
-import org.webrtc.SurfaceViewRenderer
+import hms.webrtc.RendererCommon
+import hms.webrtc.SurfaceViewRenderer
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min

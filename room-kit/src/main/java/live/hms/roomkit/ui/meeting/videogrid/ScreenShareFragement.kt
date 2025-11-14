@@ -22,7 +22,7 @@ import live.hms.prebuilt_themes.getColorOrDefault
 import live.hms.roomkit.util.contextSafe
 import live.hms.roomkit.util.viewLifecycle
 import live.hms.videoview.VideoViewStateChangeListener
-import org.webrtc.RendererCommon
+import hms.webrtc.RendererCommon
 
 const val SCREEN_SHARE_TRACK_ID = "screensharetrackId"
 class ScreenShareFragement : BottomSheetDialogFragment() {

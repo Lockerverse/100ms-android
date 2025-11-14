@@ -78,7 +78,6 @@ import live.hms.video.whiteboard.HMSWhiteboard
 import live.hms.video.whiteboard.HMSWhiteboardUpdate
 import live.hms.video.whiteboard.HMSWhiteboardUpdateListener
 import live.hms.video.whiteboard.State
-import live.hms.videofilters.HMSVideoFilter
 import java.util.*
 import kotlin.math.abs
 import kotlin.properties.Delegates
@@ -184,7 +183,7 @@ class MeetingViewModel(
         .build()
 
 
-    val filterPlugin  by lazy { HMSVideoFilter(hmsSDK) }
+//    val filterPlugin  by lazy { HMSVideoFilter(hmsSDK) }
 
     var isVbPlugin : VideoPluginMode = VideoPluginMode.NONE
     var selectedVbBackgroundUrl : String? = null
